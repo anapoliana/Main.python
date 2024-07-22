@@ -1,0 +1,78 @@
+from abc import ABC, abstractmethod
+
+
+class Pagamento(ABC):
+    
+    @abstractmethod
+    def calcular_pagamento(self):
+        pass
+
+
+class Funcionario(ABC):
+    
+    def __init__(self, nome, horatrabalhada, valor_hora ):
+        self.nome  
+        self.horas_trabalhadas
+        self.valor_hora 
+    
+    @abstractmethod
+    def calcular_pagamento(self):
+        pass
+
+
+class FuncionarioProprio(Funcionario):
+    
+    def __init__(self, nome, horas_trabalhadas, valor_hora):
+        super().__init__(nome, horas_trabalhadas, valor_hora)
+    
+    def calcular_pagamento(self):
+        return self.horas_trabalhadas * self.valor_hora
+
+
+class FuncionarioTerceirizado(Funcionario):
+    
+    def __init__(self, nome, horas_trabalhadas, valor_hora, despesa_adicional):
+        super().__init__(nome, horas_trabalhadas, valor_hora)
+        self.despesa_adicional = despesa_adicional
+    
+    def calcular_pagamento(self):
+        return self.horas_trabalhadas * self.valor_hora + 1.1 * self.despesa_adicional
+
+
+def main():
+    
+    n = int(input("Digite o número de funcionários: "))
+    
+   
+    funcionarios = []
+    
+   
+    for i in range(n):
+        print(f"Funcionário {i + 1}:")
+        nome = input("Nome: ")
+        horas_trabalhadas = float(input("Horas trabalhadas: "))
+        valor_hora = float(input("Valor por hora: "))
+        
+        tipo_funcionario = input("Tipo (P - Próprio / T - Terceirizado): ").upper()
+        
+        if tipo_funcionario == 'P':
+            funcionario = FuncionarioProprio(nome, horas_trabalhadas, valor_hora)
+        elif tipo_funcionario == 'T':
+            despesa_adicional = float(input("Despesa adicional: "))
+            funcionario = FuncionarioTerceirizado(nome, horas_trabalhadas, valor_hora, despesa_adicional)
+        else:
+            print("Tipo de funcionário inválido. Digite P ou T.")
+            continue
+        
+        funcionarios.append(funcionario)
+    
+    
+    print("\nPagamentos:")
+    for funcionario in funcionarios:
+        pagamento = funcionario.calcular_pagamento()
+        print(f"Nome: {funcionario.nome} - Pagamento: R${pagamento:.2f}")
+
+
+if __name__ == "__main__":
+    main()
+
